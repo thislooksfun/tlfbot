@@ -22,7 +22,7 @@ module.exports =
         
         function getId() {
             util.log("Getting channel id");
-            beam.getChannelId(options.login.streams[0], function(id) { //TODO: add support for more than one channel
+            beam.getChannelId(options.login.channels[0], function(id) { //TODO: add support for more than one channel
                 options.auth.chanid = id;
                 util.log("Got id!", true);
                 getAuth();
