@@ -101,7 +101,7 @@ var socket =
             } else if (msg.event == 'UserJoin')
             {
                 if (msg.data.username == this.auth.user) {
-                    this.sendMsg("tlfbot is now active - type !help for commands")
+                    this.sendMsg(this.auth.user+" is now active - type !help for commands")
                 } else
                     this.sendMsg("Welcome "+msg.data.username+" to the chat!");
             } else if (msg.event == 'UserLeave')
