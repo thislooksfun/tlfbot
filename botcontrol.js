@@ -1,4 +1,4 @@
-var bot = require('./bot');
+var bot = require('./code/bot');
 var promptly = require('promptly');
 
 bot.start();
