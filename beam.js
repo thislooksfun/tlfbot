@@ -105,16 +105,17 @@ var socket =
                 } else
                     this.sendMsg("Welcome "+msg.data.username+" to the chat!");
             } else if (msg.event == 'UserLeave')
-                this.sendMsg(msg.data.username+" has left. :(");
+                if (msg.data.username !== undefined) //Nested to prevent default 'else' from firing
+                    this.sendMsg(msg.data.username+" has left. :(");
             else
-                console.log(msg); //Unknown type;
+                console.log("Unknown event: "+msg.event)
         } else if (msg.type == 'reply' && msg.id == 0)
         {
             this.authed = msg.data.authenticated || false; //Authenticated?
             if (this.authed) util.log("Authenticated!", true);
             else err("Authentication failed!", true);
         } else
-            console.log(msg); //Unknown type;
+            console.log("Unknown type: "+msg.type); //Unknown type;
     },
 }
 

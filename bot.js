@@ -7,7 +7,7 @@ module.exports =
     
     start: function()
     {
-        var options = {channel: "thislooksfun", auth: {}};
+        var options = {auth: {}};
         options.login = JSON.parse(require('fs').readFileSync('./login.json').toString('UTF8').replace('\n', ''));
         options.auth.user = options.login.username;
         
@@ -22,7 +22,7 @@ module.exports =
         
         function getId() {
             util.log("Getting channel id");
-            beam.getChannelId(options.channel, function(id) {
+            beam.getChannelId(options.login.streams[0], function(id) { //TODO: add support for more than one channel
                 options.auth.chanid = id;
                 util.log("Got id!", true);
                 getAuth();
