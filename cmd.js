@@ -40,12 +40,16 @@ var main = {
             var res;
             
             try {
-                res = f.f(c.split(" "), {user: sender, perm: perm});
+                res = f.f(cmd.split(" "), {user: sender, perm: perm});
             } catch (e) {
                 console.log(e.stack);
                 return send("An unknown error occurred running command '"+cmd+"'");
             }
-            if (res) send(res); //If there was a reply, send it - this allows for pure backend commands
+            if (res)
+                if (typeof res == 'string')
+                    send(res); //If there was a reply, send it - this allows for pure backend commands
+                else
+                    util.err("Command response is not a string! [cmd: "+cmd+", type: "+(typeof res)+"]");
         });
     },
     cmds: cmds,
