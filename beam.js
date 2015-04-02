@@ -38,9 +38,9 @@ var socket =
         });
     },
     
-    close: function()
+    close: function(rst)
     {
-        this.sendMsg("tlfbot going offline...");
+        this.sendMsg(rst ? this.auth.user+" restarting..." : this.auth.user+" going offline...");
         this.ws.close();
     },
     
@@ -83,6 +83,7 @@ var socket =
                 cmd.data.viewers = msg.data.viewers;
             } else if (msg.event == 'ChatMessage')
             {
+                this.listeners.forEach(function (f) { if (typeof f === 'function') f(msg.data); });
                 var s = "";
                 msg.data.message.forEach(function (mes) {
                     if (mes.type == 'text')
@@ -96,27 +97,31 @@ var socket =
                         s += mes.text;
                 });
                 
-                if (s.substring(0,1) == "!" && msg.data.user_name != this.auth.user) cmd.parsecmd(s, msg.data.user_name, function(msg) {socket.sendMsg(msg);});
-                console.log("["+getFormattedTime()+"] "+msg.data.user_name+": "+s.replace('\n', ''));
+                if (s.substring(0,1) == "!" && msg.data.user_name != this.auth.user)
+                    cmd.parsecmd(s, msg.data.user_name, function(msg) { socket.sendMsg(msg); });
+                util.logTime(msg.data.user_name+": "+s.replace('\n', ''));
             } else if (msg.event == 'UserJoin')
             {
                 if (msg.data.username == this.auth.user) {
                     this.sendMsg(this.auth.user+" is now active - type !help for commands")
                 } else
                     this.sendMsg("Welcome "+msg.data.username+" to the chat!");
-            } else if (msg.event == 'UserLeave')
+            } else if (msg.event == 'UserLeave') {
                 if (msg.data.username !== undefined) //Nested to prevent default 'else' from firing
                     this.sendMsg(msg.data.username+" has left. :(");
+            } else if (msg.event == 'ClearMessages')
+                util.logTime("Chat cleared");
             else
-                console.log("Unknown event: "+msg.event)
+                util.logTime("Unknown event: "+msg.event);
         } else if (msg.type == 'reply' && msg.id == 0)
         {
             this.authed = msg.data.authenticated || false; //Authenticated?
             if (this.authed) util.log("Authenticated!", true);
             else err("Authentication failed!", true);
         } else
-            console.log("Unknown type: "+msg.type); //Unknown type;
+            util.logTime("Unknown type: "+msg.type); //Unknown type;
     },
+    listeners: [],
 }
 
 var beam =
@@ -173,14 +178,6 @@ var beam =
 module.exports = beam;
 
 //Helper functions
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-function getFormattedTime() {
-    var d = new Date();
-    return months[d.getMonth()]+"/"+d.getDay()+"/"+((""+d.getFullYear()).substring(2,4))+", "+ensureZero(d.getHours())+":"+ensureZero(d.getMinutes())+":"+ensureZero(d.getSeconds());
-}
-function ensureZero(s) {
-    return ""+(s < 10 ? "0"+s : s)
-}
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }

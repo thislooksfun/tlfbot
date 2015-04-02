@@ -1,34 +1,5 @@
 var util = require('./util');
 
-var cmds = {
-    help: {f: function(args, sender) {
-        if (!sender.perm) sender.perm = 0;
-        var list = "";
-        for (var k in cmds)
-            if (cmds.hasOwnProperty(k) && sender.perm >= (cmds[k].perm ? cmds[k].perm : 0))
-                list += (list == "" ? "!" : ", !") + k;
-        return "Commands: "+list;
-    }},
-    hi:      {f: function() { return "Hello" }},
-    users:   {f: function() { return "There are "+main.data.chatters+" users online" }},
-    viewers: {f: function() { return "There are "+main.data.viewers+" people watching right now" }},
-    restart: {
-        perm: 1,
-        f: function(args, sender) {
-            require('./botcontrol').restart();
-        }},
-    stop: {
-        perm: 2,
-        f: function(args, sender) {
-            require('./botcontrol').stop();
-        }},
-    quit: {
-        perm: 2,
-        f: function(args, sender) {
-            require('./botcontrol').quit();
-        }},
-};
-
 var main = {
     parsecmd: function(cmd, sender, send) {
         var i = cmd.indexOf(" ");
@@ -52,12 +23,13 @@ var main = {
                     util.err("Command response is not a string! [cmd: "+cmd+", type: "+(typeof res)+"]");
         });
     },
-    cmds: cmds,
+    cmds: {},
     data: {},
 };
 
-var perms = {user: 0, mod: 1, owner: 2};
 var beam;
+
+var perms = {user: 0, mod: 1, owner: 2};
 function getPerm(user, cb)
 {
     if (!beam) beam = require('./beam');

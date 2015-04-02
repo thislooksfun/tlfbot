@@ -48,6 +48,11 @@ module.exports =
     send: function(msg) {
         beam.socket.sendMsg(msg);
     },
+    restart: function() {
+        beam.socket.close(true);
+        this.running = false;
+        this.start();
+    },
     stop: function() {
         beam.socket.close();
         this.running = false;

@@ -14,4 +14,15 @@ module.exports = {
 		process.stdout.write(msg);
 		process.stdout.write(newline?"\n\n":"\n");
 	},
+	logTime: function(msg) {
+	    console.log("["+this.getFormattedTime()+"] "+msg);
+	},
+	months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	getFormattedTime: function() {
+	    var d = new Date();
+	    return this.months[d.getMonth()]+"/"+d.getDay()+"/"+((""+d.getFullYear()).substring(2,4))+", "+this.ensureZero(d.getHours())+":"+this.ensureZero(d.getMinutes())+":"+this.ensureZero(d.getSeconds());
+	},
+	ensureZero: function(s) {
+	    return ""+(s < 10 ? "0"+s : s)
+	},
 };
