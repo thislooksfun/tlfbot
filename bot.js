@@ -1,59 +1,55 @@
 var beam = require('./beam');
+var util = require('./util');
 
 module.exports =
 {
-  running: false,
-  
-  start: function()
-  {
-    var options = {channel: "thislooksfun", auth: {}};
-    options.login = JSON.parse(require('fs').readFileSync('../login.json').toString('UTF8').replace('\n', ''));
-    options.auth.user = options.login.username;
-
-    logBig("Logging in");
-    beam.login(options.login, onLogin);
-
-    function onLogin(data) {
-      options.auth.userid = data.id;
-      logBig("Logged in as "+options.login.username, true);
-      getId();
-    }
-
-    function getId() {
-      logBig("Getting channel id");
-      beam.getChannelId(options.channel, function(id) {
-        options.auth.chanid = id;
-        logBig("Got id!", true);
-        getAuth();
-      });
-    }
-
-    function getAuth() {
-      logBig("Getting auth key");
-      beam.getAuth(options.auth.chanid, function(key, points) {
-        options.auth.key = key;
-        options.auth.points = points;
-        logBig("Got auth key", true);
-        connect();
-      });
-    }
-
-    function connect() {
-      logBig("Connecting");
-      beam.socket.connectChannel(options.auth);
-    }
-
-    function logBig(msg, newline) {
-      console.log("##### MSG: ["+msg+"] #####"+(newline?"\n":""));
-    }
-    function errBig(msg, newline) {
-      console.warn("##### ERR: ["+msg+"] #####"+(newline?"\n":""));
-    }
+    running: false,
     
-    this.running = true;
-  },
-  stop: function() {
-    beam.socket.close();
-    this.running = false;
-  },
+    start: function()
+    {
+        var options = {channel: "thislooksfun", auth: {}};
+        options.login = JSON.parse(require('fs').readFileSync('./login.json').toString('UTF8').replace('\n', ''));
+        options.auth.user = options.login.username;
+        
+        util.log("Logging in");
+        beam.login(options.login, onLogin);
+        
+        function onLogin(data) {
+            options.auth.userid = data.id;
+            util.log("Logged in as "+options.login.username, true);
+            getId();
+        }
+        
+        function getId() {
+            util.log("Getting channel id");
+            beam.getChannelId(options.channel, function(id) {
+                options.auth.chanid = id;
+                util.log("Got id!", true);
+                getAuth();
+            });
+        }
+        
+        function getAuth() {
+            util.log("Getting auth key");
+            beam.getAuth(options.auth.chanid, function(key, points) {
+                options.auth.key = key;
+                options.auth.points = points;
+                util.log("Got auth key", true);
+                connect();
+            });
+        }
+        
+        function connect() {
+            beam.socket.connectChannel(options.auth);
+        }
+        
+        this.running = true;
+    },
+    send: function(msg) {
+        beam.socket.sendMsg(msg);
+    },
+    stop: function() {
+        beam.socket.close();
+        this.running = false;
+    },
 }
