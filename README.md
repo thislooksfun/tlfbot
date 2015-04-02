@@ -73,4 +73,4 @@ All errors thrown in any commands will be caught, and printed to the console. It
 If the command is invalid (doesn't exist), it will send the message `"Unknown command '<c>'"` where `<c>` is the command name minus the args. (The `c` for `!hello 1 3 5 yes` is `!hello`)
 
 # License
-This work is copywrited under the [GPL v2 licence](http://github.com/thislooksfun/tlfbot).
+This work is copywrited under the [GPL v2 licence](https://github.com/thislooksfun/tlfbot/blob/master/LICENSE).
