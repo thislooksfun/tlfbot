@@ -82,5 +82,8 @@ function(args, sender) { return "<msg>" }
 All errors thrown in any commands will be caught, and printed to the console. It will also send a message to the chat room saying `"An unknown error occurred running command '<cmd>'"`  
 If the command is invalid (doesn't exist), it will send the message `"Unknown command '<c>'"` where `<c>` is the command name minus the args. (The `c` for `!hello 1 3 5 yes` is `!hello`)
 
+##Chat listeners
+-- Coming soon --
+
 # License
 This work is copywrited under the [GPL v2 licence](https://github.com/thislooksfun/tlfbot/blob/master/LICENSE).
