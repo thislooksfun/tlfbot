@@ -5,6 +5,12 @@ This is a fairly simple chat bot for [beam.pro](http://beam.pro) build in Node.j
 ## Note:
 In this document I will be specifying variable items (either ones you need to input, or things that aren't fixed) with the syntax `<item description>`
 
+---
+
+If you want actual examples of any of the following syntax, please click [here](https://github.com/thislooksfun/tlfbot/blob/master/Examples.md).
+
+---
+
 ## To use:
 1. Install [Node.js](https://nodejs.org/)
 2. Clone/download this code
@@ -17,38 +23,42 @@ In this document I will be specifying variable items (either ones you need to in
 }
 ```
 **NOTE**: Only the first channel will be read at the moment.
-If you want an example of a real 'login.json,' here's mine (password redacted for security reasons):
-```json
-{
-	"username": "tlfbot",
-	"password": "<REDACTED>",
-	"channels": ["thislooksfun", "tlfbot"]
-}
-```
+
 4. `cd` to the install dir, and run `node botcontrol.js`  
 You **must** cd to the install dir, or it *will* crash!
 5. You now have your own beam.pro chat bot!
 
 ## Adding/changing commands
-1. Open `cmd.js`
-2. Edit the `cmds` array
-3. All commands are stored in the format:
+To add a command, simply add a file to the `commands` folder, with the following syntax:
 ```js
-var cmds = {
-	<cmd name>: {perm: <p>, f: <f>}
-};
+module.exports = [
+	{
+		name: "<name>",
+		usage: "<usage>",
+		aliases: ["<alias 1>", "<alias 2>", ... "<alias n>"],
+		perm: 0,
+		f: function() {
+			return "<resp>";
+		}
+	}
+];
 ```
-`<p>` is the optional permission level (defaults to 0)  
-`<f>` is the function the command will run.
+### Explanations:
+`name` - The name of your command. This is what will be typed to run your command  
+**NOTE:** this will be prefixed with "!" automatically, so having a name of `"!foo"` will require the user to type `!!foo`  
+`usage` - How to use your command. This should be in the form `!<name> [args]`  
+`aliases` - (Optional) Any aliases for your command  
+`perm` - The permission level (see "permissions" below)  
+`f` - The actual code that will be run (see "function" below)
 
 ---
 
 ### Permissions
 The permission levels are as follows:  
 0) Anyone can use  
-1) Only mods (and the channel owner) can use  
-3) Only the channel owne can use  
-**All commands default to a permission level of 0, unless specified otherwise. Explicitly set any dangerous commands to be 1 or 2**
+1) Only mods and higher  
+2) Only admins and higher can use  
+3) Only the channel owner can use
 
 ---
 

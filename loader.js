@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path_module = require('path');
+var util = require('./util');
 
 var cmd = require('./cmd');
 var beam = require('./beam');
@@ -22,7 +23,7 @@ function loadModules(path, load, rl)
         try {
             var data = require(path);
             if (data)
-                load(data);
+                load(data, path);
             else
                 util.err("Error loading command '"+path+"', module.exports is undefined");
         } catch (e) {
@@ -38,11 +39,20 @@ function load(rl) {
         if (typeof data === 'function')
             beam.socket.listeners[beam.socket.listeners.length] = data;
     });
-    loadModules(path_module.join(__dirname, 'commands'), function(data) {
+    loadModules(path_module.join(__dirname, 'commands'), function(data, path) {
         if (Array.isArray(data)) {
-            data.forEach(function (f) {
+            data.forEach(function (f, i) {
+                if (typeof f.name !== 'string') return util.err("Error reading command file '"+path+"' - name not specified for element #"+i);
+                if (typeof f.usage !== 'string') return util.err("Error loading command '"+f.name+"' - usage not specified");
+                if (typeof f.perm !== 'number') return util.err("Error loading command '"+f.name+"' - permission level not specified");
+                if (typeof f.f !== 'function') return util.err("Error loading command '"+f.name+"' - command function not specified");
                 if (cmd.cmds[f.name]) return util.err("Error loading command '"+f.name+"' - command already registered");
                 cmd.cmds[f.name] = f;
+                if (f.aliases)
+                    f.aliases.forEach(function(al) {
+                        if (cmd.cmds[al]) return util.err("Error loading alias '"+al+"' of '"+f.name+"' - command already registered");
+                        cmd.cmds[al] = f;
+                    });
             });
         }
         else

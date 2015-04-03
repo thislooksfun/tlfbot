@@ -29,7 +29,7 @@ var main = {
 
 
 var beam;
-var perms = {user: 0, mod: 1, owner: 2};
+var perms = {user: 0, mod: 1, admin: 2, owner: 3};
 function getPerm(user, cb)
 {
     if (!beam) beam = require('./beam');

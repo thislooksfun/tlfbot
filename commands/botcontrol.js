@@ -21,7 +21,7 @@ module.exports =  [
 		name: "stop",
 		usage: "!stop",
 //		aliases: [],
-		perm: 2,
+		perm: 3,
 		f: function(args, sender) {
 			require('../botcontrol').stop();
 		}

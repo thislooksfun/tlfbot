@@ -1,5 +1,5 @@
 var cmd = require('../cmd');
-var perms = ["User", "Mod", "Owner"];
+var perms = ["User", "Mod", "Admin", "Owner"];
 module.exports = [
 	{
 		name: "perm",
