@@ -1,6 +1,6 @@
 # tlfbot
 
-This is a fairly simple chat bot for [beam.pro](http://beam.pro) build in Node.js. (It looks more complex than it really is, because I love over-complicating things, and making them easy to expand, but not easy to maintain.)
+This is a fairly simple chat bot for [beam.pro](http://beam.pro) build in Node.js. (It looks more complex than it really is. I love over-complicating things by making them easy to expand but difficult to parse/maintain.)
 
 ## Note:
 In this document I will be specifying variable items (either ones you need to input, or things that aren't fixed) with the syntax `<item description>`
