@@ -27,12 +27,13 @@ var main = {
     data: {},
 };
 
-var beam;
 
+var beam;
 var perms = {user: 0, mod: 1, owner: 2};
 function getPerm(user, cb)
 {
     if (!beam) beam = require('./beam');
+    
     beam.query("chats/"+beam.socket.auth.chanid+"/users", "GET", {}, function(err, data) {
         if (err) {
             err("ERR: "+err);
@@ -41,11 +42,10 @@ function getPerm(user, cb)
         data.forEach(function(d) {
             if (d.user_name === user) {
                 var highest = 0;
-                for (var i = 0; i < d.user_roles.length; i++) {
-                    var p = perms[d.user_roles[i].toLowerCase()];
-                    if (p > highest)
-                        highest = p
-                }
+                d.user_roles.forEach(function (perm) {
+                    var p = perms[perm.toLowerCase()];
+                    if (p > highest) highest = p
+                });
                 cb(highest);
             }
         });

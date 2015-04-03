@@ -40,7 +40,8 @@ var socket =
     
     close: function(rst)
     {
-        this.sendMsg(rst ? this.auth.user+" restarting..." : this.auth.user+" going offline...");
+        var m = rst ? this.auth.user+" restarting..." : this.auth.user+" going offline...";
+        this.sendMsg(m);
         this.ws.close();
     },
     

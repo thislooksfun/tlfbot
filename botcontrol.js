@@ -12,7 +12,7 @@ module.exports = {
 function stop() { if (bot.running) bot.stop(); else console.log("Bot is already stopped!"); }
 function start() { if (!bot.running) bot.start(); else console.log("Bot is already running!"); }
 function restart() { bot.restart(); }
-function quit() { bot.stop; process.exit(); }
+function quit() { bot.stop(); process.exit(); }
 
 bot.start();
 function initConsoleInput() { promptly.prompt("", onInput); }
